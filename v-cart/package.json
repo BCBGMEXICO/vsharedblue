@@ -1,0 +1,5 @@
+{
+    "name": "v-cart",
+    "main": "index.js",
+    "files": ["components/", "controllers/"]
+}

@@ -1,0 +1,5 @@
+{
+    "name": "v-checkout",
+    "main": "index.js",
+    "files": ["components/", "controllers/"]
+}
