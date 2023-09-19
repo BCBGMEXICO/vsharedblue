@@ -137,3 +137,17 @@ export const getUserInfos = (applicationToken, store) => {
     headers: { store, ApplicationToken },
   })
 }
+
+
+export const getUserExists = (email, store) => {
+  return instance.get(`https://bcbgmx.myvtex.com/api/checkout/pub/profiles?email=${email}`, {
+    headers: { store },
+  })
+}
+
+export const createUser = (orderFormId, userData, store) => {
+  https://{accountName}.{environment}.com.br/api/checkout/pub/orderForm/{orderFormId}/attachments/clientProfileData
+  return instance.post(`https://bcbgmx.myvtex.com/api/checkout/pub/orderForm/${orderFormId}/attachments/clientProfileData`,userData, {
+    headers: { store },
+  })
+}

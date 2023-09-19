@@ -8,3 +8,5 @@ export const VALIDATE_CODE = 'VALIDATE_CODE'
 export const UPDATE_USER = 'UPDATE_USER'
 export const UPDATE_USER2 = 'UPDATE_USER2'
 export const IS_FIRST_TIME = 'IS_FIRST_TIME'
+//TODO
+export const CREATE_USER = 'CREATE_USER'

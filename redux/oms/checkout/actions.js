@@ -209,11 +209,13 @@ export function addShippingDataV3(store, orderFormId, postalCode, cb) {
   }
 }
 
+//TODO
 export function selectDeliveryOption(store, orderFormId, deliveryOption, cb) {
   return async (dispatch, state) => {
     try {
       const { actions } = createActionsMiddleware(dispatch, omsActions)
 
+      console.log("DELIVERY OPTION", deliveryOption);
       const response = await Services.selectDeliveryOption(
         store,
         orderFormId,
@@ -221,6 +223,8 @@ export function selectDeliveryOption(store, orderFormId, deliveryOption, cb) {
       )
 
       const { data } = response
+
+      console.log("RESPONSE ADDRESS", response);
 
       actions.updateOrderForm(data, (err, orderForm) => cb(false, orderForm))
     } catch (e) {
@@ -311,7 +315,7 @@ export function createOrder(store, orderFormId, paymentData, cb) {
         orderFormId,
         paymentData,
       )
-
+      console.log("RESPONSE DE ORDEN", response);
       const { data } = response
 
       dispatch({

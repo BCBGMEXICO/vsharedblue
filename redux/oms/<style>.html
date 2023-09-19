@@ -1,0 +1,279 @@
+<style>
+    .body-all {
+        overflow-x: hidden;
+    }
+</style>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const apiToken = "1b5f0b67045b1194857537bfe59e020b6f0a2ef4f8423f5958c1fe2f0f33804b";
+        const projectRBNStudioId = "d37l81rxb3";
+        const projectLunchId = "e9l1cwo1gh";
+        const apiRBNStudioMedia = `https://api.wistia.com/v1/medias.json?project_id=${projectRBNStudioId}`;
+        const apiLunchMedia = `https://api.wistia.com/v1/medias.json?project_id=${projectLunchId}`;
+        const podcastDiv = document.getElementById("grid-podcast");
+        const elementPodcast = document.getElementById("element-podcast");
+        const videoDiv = document.getElementById("grid-video");
+        const elementVideo = document.getElementById("element-video");
+        const imageDiv = document.getElementById("grid-images");
+        const elementImage = document.getElementById("element-images");
+        const showVideo = document.getElementById("show-video");
+        const showAudio = document.getElementById("show-audio");
+        const showImage = document.getElementById("show-image");
+        let videoMediaData = [];
+        let videoMediaDataString = "";
+        let imageMediaData = [];
+        let imageMediaDataString = "";
+        let audioMediaData = [];
+        let audioMediaDataString = "";
+        let page = 1;
+
+        const getWistiaMedia = async (url, type = 'Video') => {
+            const headers = {
+                "Authorization": `Bearer ${apiToken}`
+            };
+
+            try {
+                let response = [];
+                console.log("PAGE IS " + page);
+                if (type == 'Video')
+                    response = await fetch(url + "&type=" + type + "&page=" + page + "&per_page=6", { headers });
+                else
+                    response = await fetch(url + "&type=" + type, { headers })
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                }
+
+                const mediaData = await response.json();
+                return mediaData;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                return null;
+            }
+        }
+
+        function videoString(item) {
+            return `<div class="wrapped-card-2 stacked">
+          <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+          <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+          <iframe src="https://fast.wistia.net/embed/iframe/${item.hashed_id}?seo=true" title="${item.name}" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" msallowfullscreen width="100%!important" height="100%"></iframe>
+          </div>
+          </div>
+          <div class="card-details-2"><p class="bold-heading-2 card-title white">${item.name}</p>
+          <p class="spark-small-sub-paragraph-2 paragraph-content paragraph-content white">${item.description}</p>
+          <div class="text-block-7 white">${item.updated.split("T")[0]}
+          </div>
+          </div>
+          </div>
+          `
+        }
+
+        function audioString(item) {
+            return `<div class="wrapped-card-2 stacked">
+            <iframe src="https://fast.wistia.net/embed/iframe/${item.hashed_id}?seo=true&videoFoam=true" title="${item.name}" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" msallowfullscreen width:"100%" height="150px"></iframe>
+            <div class="card-details-2">
+                <p class="bold-heading-2 card-title white">${item.name}</p>
+                <div class="spark-small-sub-paragraph-2 paragraph-content paragraph-content white">${item.description}</div>
+                <div class="text-block-7 white">
+                    <p>${item.updated.split("T")[0]}</p>
+                </div>
+            </div>
+         </div>`;
+        }
+
+        function imageString(item) {
+            return `<div class="wrapped-card-2 stacked">
+                    <div class="div-block-47" style="background:url(${item.assets[0].url});background-size:cover;background-position:center;background-repeat:no-repeat;">
+                <div class="chiptype">${item.type}</div>
+                </div>
+                <div class="card-details-2"><p class="bold-heading-2 card-title white">${item.name}</p>
+                <p class="spark-small-sub-paragraph-2 paragraph-content paragraph-content white">${item.description}</p>
+                <div class="text-block-7 white">${item.updated.split("T")[0]}
+                </div>
+                </div>
+                </div>`;
+        }
+
+        function getVideos() {
+
+            getWistiaMedia(apiLunchMedia, 'Video')
+                .then(media => {
+                    if (media) {
+                        console.log("Video Media apiLunchMedia:", media);
+                        videoMediaData = [...videoMediaData, ...media];
+                        const resMedia = videoMediaData.map(item => videoString(item)).join("");
+                        videoDiv.innerHTML = resMedia;
+                        videoMediaDataString = resMedia;
+                        elementVideo.innerHTML = `${videoMediaData.length} elements`;
+                        if (videoMediaData.length < 6) showVideo.style.display = "none";
+                    } else {
+                        console.log("Failed to retrieve projects.");
+                    }
+                });
+        }
+
+
+        function getAllAudio() {
+
+            getWistiaMedia(apiLunchMedia, 'Audio')
+                .then(media => {
+                    if (media) {
+                        console.log("Audio Media apiLunchMedia:", media);
+                        audioMediaData = [...audioMediaData, ...media];
+                        const resMedia = media.map(item => audioString(item)).join("");
+                        audioMediaDataString = resMedia;
+                        podcastDiv.innerHTML = resMedia;
+                        elementPodcast.innerHTML = `${audioMediaData.length} elements`;
+                        if (audioMediaData.length > 6) showAudio.style.display = "block!important";
+                    } else {
+                        console.log("Failed to retrieve projects.");
+                    }
+                });
+        }
+
+        function getImages() {
+
+
+            getWistiaMedia(apiLunchMedia, 'Image')
+                .then(media => {
+                    if (media) {
+                        console.log("Image Media:", media);
+                        imageMediaData = [...imageMediaData, ...media];
+                        const resMedia = imageMediaData.map(item => imageString(item)).join("");
+                        imageMediaDataString = resMedia;
+                        imageDiv.innerHTML = resMedia;
+                        elementImage.innerHTML = `${imageMediaData.length} elements`;
+                        if (imageMediaData.length > 6) showImage.style.display = "block!important";
+                    } else {
+                        console.log("Failed to retrieve projects.");
+                    }
+                });
+        }
+
+
+        getWistiaMedia(apiRBNStudioMedia, 'Audio')
+            .then(media => {
+                if (media) {
+                    console.log("Audio Media apiRBNStudioMedia:", media);
+                    audioMediaData = [...audioMediaData, ...media];
+                    getAllAudio();
+                } else {
+                    console.log("Failed to retrieve projects.");
+                }
+            });
+
+        getWistiaMedia(apiLunchMedia, 'Image')
+            .then(media => {
+                if (media) {
+                    console.log("Image Media:", media);
+                    imageMediaData = [...imageMediaData, ...media];
+                    getImages();
+                } else {
+                    console.log("Failed to retrieve projects.");
+                }
+            });
+
+        getWistiaMedia(apiRBNStudioMedia, 'Video')
+            .then(media => {
+                if (media) {
+                    console.log("Video Media apiRBNStudioMedia:", media);
+                    videoMediaData = media;
+                    getVideos();
+                } else {
+                    console.log("Failed to retrieve projects.");
+                }
+            });
+
+        function compararFechasNew(a, b) {
+            const fechaA = new Date(a.updated);
+            const fechaB = new Date(b.updated);
+            if (fechaA < fechaB) return -1;
+            if (fechaA > fechaB) return 1;
+            return 0;
+        }
+
+        function compararFechas(a, b) {
+            const fechaA = new Date(a.updated);
+            const fechaB = new Date(b.updated);
+            if (fechaA > fechaB) return -1;
+            if (fechaA < fechaB) return 1;
+            return 0;
+        }
+
+        document.getElementById("show-video").addEventListener("click", function () {
+            page = page + 1;
+            console.log("PAGE " + page);
+            getWistiaMedia(apiRBNStudioMedia, 'Video')
+                .then(media => {
+                    if (media) {
+                        console.log("Video Media apiLunchMedia:", media);
+
+                        videoMediaData = [...videoMediaData, ...media];
+                        console.log("Video Media apiLunchMedia:", videoMediaData);
+                        const resMedia = videoMediaData.map(item => videoString(item)).join("");
+                        videoDiv.innerHTML = resMedia;
+                        videoMediaDataString = resMedia;
+                        elementVideo.innerHTML = `${videoMediaData.length} elements`;
+                        //if(videoMediaData.length < 6) showVideo.style.display = "none";
+                    } else {
+                        console.log("Failed to retrieve projects.");
+                    }
+                });
+        });
+
+        document.getElementById("all-video").addEventListener("click", function () {
+            videoDiv.innerHTML = videoMediaDataString;
+        });
+
+
+        document.getElementById("all-audio").addEventListener("click", function () {
+            podcastDiv.innerHTML = audioMediaDataString;
+        });
+
+        document.getElementById("all-image").addEventListener("click", function () {
+            imageDiv.innerHTML = imageMediaDataString;
+        });
+
+
+        document.getElementById("news-video").addEventListener("click", function () {
+            const sortArray = videoMediaData.sort(compararFechas);
+            const resMedia = sortArray.map(item => videoString(item)).join("");
+            videoDiv.innerHTML = resMedia;
+
+        });
+
+        document.getElementById("news-audio").addEventListener("click", function () {
+            const sortArray = audioMediaData.sort(compararFechas);
+            const resMedia = sortArray.map(item => audioString(item)).join("");
+            podcastDiv.innerHTML = resMedia;
+
+        });
+
+        document.getElementById("news-image").addEventListener("click", function () {
+            const sortArray = imageMediaData.sort(compararFechas);
+            const resMedia = sortArray.map(item => imageString(item)).join("");
+            imageDiv.innerHTML = resMedia;
+
+        });
+
+        document.getElementById("last-video").addEventListener("click", function () {
+            const sortArray = videoMediaData.sort(compararFechasNew);
+            const resMedia = sortArray.map(item => videoString(item)).join("");
+            videoDiv.innerHTML = resMedia;
+        });
+        document.getElementById("last-audio").addEventListener("click", function () {
+            const sortArray = audioMediaData.sort(compararFechasNew);
+            const resMedia = sortArray.map(item => audioString(item)).join("");
+            podcastDiv.innerHTML = resMedia;
+        });
+        document.getElementById("last-image").addEventListener("click", function () {
+            const sortArray = imageMediaData.sort(compararFechasNew);
+            const resMedia = sortArray.map(item => imageString(item)).join("");
+            imageDiv.innerHTML = resMedia;
+        });
+
+    });
+</script>

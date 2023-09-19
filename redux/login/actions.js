@@ -9,7 +9,8 @@ import {
   UPDATE_USER,
   GET_INFO_WITH_ID,
   UPDATE_USER2,
-  IS_FIRST_TIME
+  IS_FIRST_TIME,
+  CREATE_USER
 } from './types'
 import * as Services from './services'
 
@@ -18,7 +19,7 @@ import * as Services from './services'
  * @param {*} email email da pessoa
  * @param {*} store loja
  */
-export function getCodeUser (email, store, cb) {
+export function getCodeUser(email, store, cb) {
   return async (dispatch, state) => {
     try {
       await Services.getCodeUser(email, store)
@@ -35,11 +36,11 @@ export function getCodeUser (email, store, cb) {
  * @param {*} accesskey codigo recebido pelo email
  * @param {*} store loja
  */
-export function setUser (email, accesskey, store, cb) {
+export function setUser(email, accesskey, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.setUser(email, accesskey, store)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: SET_USER,
         payload: {
@@ -58,11 +59,11 @@ export function setUser (email, accesskey, store, cb) {
  * verifica se o email esta na base ou se existe o email
  * @param {*} email email da pessoa
  */
-export function verifyUserEmail (email, store, cb) {
+export function verifyUserEmail(email, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.verifyUserEmail(email, store)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: VERIFY_USER_EMAIL,
         payload: {
@@ -81,7 +82,7 @@ export function verifyUserEmail (email, store, cb) {
  * @param {*} email email da pessoa
  * @param {*} password senha da pessoa
  */
-export function loginUserByEmailPassword (email, password, store, cb) {
+export function loginUserByEmailPassword(email, password, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.loginUserByEmailPassword(
@@ -89,7 +90,7 @@ export function loginUserByEmailPassword (email, password, store, cb) {
         password,
         store,
       )
-      const {data} = response
+      const { data } = response
       dispatch({
         type: LOGIN_USER,
         payload: {
@@ -108,7 +109,7 @@ export function loginUserByEmailPassword (email, password, store, cb) {
  * @param {*} email email da pessoa
  * @param {*} newPassword nova senha da pessoa
  */
-export function loginWithNewPassword (token, newPassword, store, cb) {
+export function loginWithNewPassword(token, newPassword, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.changeRecoveryPassword(
@@ -116,7 +117,7 @@ export function loginWithNewPassword (token, newPassword, store, cb) {
         newPassword,
         store,
       )
-      const {data} = response
+      const { data } = response
       dispatch({
         type: LOGIN_USER,
         payload: {
@@ -133,7 +134,7 @@ export function loginWithNewPassword (token, newPassword, store, cb) {
 /**
  * limpa o usuario
  */
-export function clearUser () {
+export function clearUser() {
   return async dispatch => {
     dispatch({
       type: CLEAR_USER,
@@ -145,7 +146,7 @@ export function clearUser () {
 /**
  * limpa o token do usuario e o usuario
  */
-export function clearUserToken () {
+export function clearUserToken() {
   return async dispatch => {
     dispatch({
       type: CLEAR_USER_TOKEN,
@@ -160,7 +161,7 @@ export function clearUserToken () {
  * @param {*} provider_oauth_code id do user
  * @param {*} provider_oauth nome da rede social
  */
-export function loginWithSocial (
+export function loginWithSocial(
   email,
   provider_oauth_code,
   provider_oauth,
@@ -175,7 +176,7 @@ export function loginWithSocial (
         provider_oauth,
         store,
       )
-      const {data} = response
+      const { data } = response
       dispatch({
         type: LOGIN_USER,
         payload: {
@@ -190,11 +191,11 @@ export function loginWithSocial (
   }
 }
 
-export function loginWithSocialNetwork (token, provider, store, cb) {
+export function loginWithSocialNetwork(token, provider, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.loginSocialNetwork(token, provider, store)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: LOGIN_USER,
         payload: {
@@ -213,14 +214,14 @@ export function loginWithSocialNetwork (token, provider, store, cb) {
  * tras as infos do usuario pasando id (recomendado antes de logar com fb ou google)
  * @param {*} email email
  */
-export function getInfoWithId (id, store, cb) {
+export function getInfoWithId(id, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getInfoWithId(id, store)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: GET_INFO_WITH_ID,
-        payload: {user: data},
+        payload: { user: data },
       })
       cb(false, data)
     } catch (e) {
@@ -234,13 +235,16 @@ export function getInfoWithId (id, store, cb) {
  * tras o token para logar
  * @param {*} email email
  */
-export function getLoginToken (email, store, cb) {
+export function getLoginToken(email, store, cb) {
   return async (dispatch, state) => {
     try {
+      console.log("LOGIN CODE CALLED");
       const response = await Services.getToken(email, store)
-      const {data} = response
+      const { data } = response
+      console.log("LOGIN DATA", data)
       cb(false, data, response.status)
     } catch (e) {
+      console.log("LOGIN ERROR", e)
       cb(true, e)
     }
   }
@@ -250,11 +254,11 @@ export function getLoginToken (email, store, cb) {
  * tras o token para recuperar senha
  * @param {*} email email
  */
-export function getRecoveryPasswordToken (email, store, cb) {
+export function getRecoveryPasswordToken(email, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getTokenRecoveryPassword(email, store)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: GET_TOKEN,
         payload: {
@@ -273,11 +277,11 @@ export function getRecoveryPasswordToken (email, store, cb) {
  * @param {*} email email
  * @param {*} token token
  */
-export function validateCode (email, code, store, cb) {
+export function validateCode(email, code, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.validateCode(email, code, store)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: VALIDATE_CODE,
         payload: {
@@ -291,11 +295,11 @@ export function validateCode (email, code, store, cb) {
   }
 }
 
-export function updateUser (token, store, dataUser, cb) {
+export function updateUser(token, store, dataUser, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.updateUser(token, store, dataUser)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: UPDATE_USER2,
         payload: data,
@@ -307,11 +311,11 @@ export function updateUser (token, store, dataUser, cb) {
   }
 }
 
-export function updateUserV2 (token, store, dataUser, cb) {
+export function updateUserV2(token, store, dataUser, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.updateUserV2(token, store, dataUser)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: UPDATE_USER2,
         payload: data,
@@ -323,11 +327,11 @@ export function updateUserV2 (token, store, dataUser, cb) {
   }
 }
 
-export function getUserInfoByToken (token, store, cb) {
+export function getUserInfoByToken(token, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getUserInfo(token, store)
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: UPDATE_USER,
@@ -344,11 +348,11 @@ export function getUserInfoByToken (token, store, cb) {
   }
 }
 
-export function getUserInfosByToken (token, store, cb) {
+export function getUserInfosByToken(token, store, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getUserInfos(token, store)
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: UPDATE_USER,
@@ -364,11 +368,55 @@ export function getUserInfosByToken (token, store, cb) {
   }
 }
 
-export function isFirstTime (cb) {
+export function isFirstTime(cb) {
   return async (dispatch, state) => {
     dispatch({
       type: IS_FIRST_TIME,
       payload: false,
     })
+  }
+}
+
+/**
+ * verifica se o email esta na base ou se existe o email
+ * @param {*} email email da pessoa
+ */
+export function createUser(store, userdata, orderFormId, cb) {
+  return async (dispatch, state) => {
+    try {
+      let result = await Services.getUserExists();
+      console.log("USER EXISTS", result);
+      if (result != null) {
+        let user = result.data;
+        if (user.userProfileId == null) {
+          try {
+            let created = await Services.createUser(orderFormId, userdata, store)
+            console.log("CREATED USER", created);
+            cb(false, created.data)
+          } catch (e) {
+            console.log("ERROR", e);
+            cb(true, e)
+          }
+        }
+        else
+          return user;
+      }
+      else {
+        console.log("ERRROR RESULT IS NULL");
+        cb(true, null)
+      }
+      // const response = await Services.verifyUserEmail(email, store)
+      // const {data} = response
+      // dispatch({
+      //   type: VERIFY_USER_EMAIL,
+      //   payload: {
+      //     data,
+      //   },
+      // })
+      //cb(false)
+    } catch (e) {
+      console.log("EXCEPTION USER", e)
+      cb(true, e)
+    }
   }
 }

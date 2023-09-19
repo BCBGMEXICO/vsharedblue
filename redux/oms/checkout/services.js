@@ -54,11 +54,25 @@ export const addShippingDataV3 = (store, orderFormId, postalCode) => instance.po
   `/oms/v3/api/shipping/group/${store}/${orderFormId}`,
   postalCode,
 )
+//TODO
+export const selectDeliveryOption = (store, orderFormId, deliveryOption) =>
 
-export const selectDeliveryOption = (store, orderFormId, deliveryOption) => instance.post(
-  `/oms/v2/api/shipping/${store}/${orderFormId}/selectoption`,
-  deliveryOption,
-)
+  // instance.post(
+  //   `https://bcbgmx.myvtex.com/api/checkout/pub/orderForm/${orderFormId}/attachments/shippingData`,
+  //   deliveryOption, { headers: { store } })
+
+  instance.post(
+    `/oms/v2/api/shipping/split/${store}/${orderFormId}/selectoption`,
+    deliveryOption,)
+
+
+export const selectDeliveryOptionv2 = (store, orderFormId, deliveryOption) =>
+
+  instance.post(
+    `https://bcbgmx.myvtex.com/api/checkout/pub/orderForm/${orderFormId}/attachments/shippingData`,
+    deliveryOption, { headers: { store } })
+
+
 
 // Payment
 export const getPaymentMethods = (store, orderFormId) => instance.get(

@@ -27,6 +27,7 @@ const INITIAL = {
 }
 
 export default (state = INITIAL, action) => {
+  console.log("UPDATING ORDER FORM",action.payload );
   switch (action.type) {
     case UPDATE_ORDERFORM:
       return {

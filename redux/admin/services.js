@@ -18,7 +18,8 @@ export const getInfoByGeolocation = (lat, lon, id, quantity, seller, postalCode,
 
 export const getShoppingList = (userId, store) => instance.get(`/admin/api/v1/shoppinglist/byuserid/${userId}`, { headers: { store } })
 
-export const getStores = (store) => instance.get('/admin/api/v1/stores/search?_fields=address,city,complement,country,horario,latitude,longitude,name,neighborhood,number,phone,postalCode,state,uf,productLine', { headers: { store } })
+//export const getStores = (store) => instance.get('/admin/api/v1/stores/search?_fields=address,city,complement,country,horario,latitude,longitude,name,neighborhood,number,phone,postalCode,state,uf,productLine', { headers: { store } })
+export const getStores = (store) => instance.get('https://bcbgmx.myvtex.com/api/dataentities/NT/search?_fields=id,centroComercial,correo,Direccion,especie,horarios,latitude,longitude,rama,telefono,tienda', { headers: { store } })
 
 export const getStoresWithGeolocation = (store, lat, lon) => instance.get('/admin/api/v1/stores/search?_fields=address,city,complement,country,horario,latitude,longitude,name,neighborhood,number,phone,postalCode,state,uf,productLine', { headers: { store, lat, lon } })
 
