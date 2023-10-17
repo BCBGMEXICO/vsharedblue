@@ -15,6 +15,7 @@ import {
   SAVE_CUPOM_PRICE,
   CLEAR_MY_ORDERS,
   CLEAR_ORDERS,
+  CLEAR_ORDER_FORM
 } from './types'
 
 const INITIAL = {
@@ -27,7 +28,7 @@ const INITIAL = {
 }
 
 export default (state = INITIAL, action) => {
-  console.log("UPDATING ORDER FORM",action.payload );
+  console.log("UPDATING ORDER FORM", action.payload);
   switch (action.type) {
     case UPDATE_ORDERFORM:
       return {
@@ -41,6 +42,7 @@ export default (state = INITIAL, action) => {
       return {
         ...state,
         orderForm: {
+          ...state.orderForm,
           orderFormId: action.payload,
         },
       }
@@ -62,6 +64,25 @@ export default (state = INITIAL, action) => {
           items: action.payload.data.items,
           selectableGifts: action.payload.data.selectableGifts,
         },
+      }
+    case CLEAR_ORDER_FORM:
+      return {
+        ...state,
+        orderForm: {
+          ...state.orderForm,
+          shippingData: {
+            ...state.orderForm.shippingData,
+            logisticsInfo: []
+          },
+          totalizers: [],
+          items: [],
+          selectableGifts: [],
+        },
+        postalCode: {},
+        delivery: {},
+        searchRecent: [],
+        myRequests: [],
+        totalizerFinalFrete: 0,
       }
     case GET_POSTAL_CODE:
       return {

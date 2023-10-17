@@ -16,9 +16,10 @@ import {
   SAVE_CUPOM_PRICE,
   CLEAR_ORDERS,
   CLEAR_MY_ORDERS,
+  CLEAR_ORDER_FORM
 } from './types'
 
-export function updateOrderForm (orderForm, cb) {
+export function updateOrderForm(orderForm, cb) {
   return async (dispatch, state) => {
     try {
       dispatch({
@@ -34,11 +35,12 @@ export function updateOrderForm (orderForm, cb) {
   }
 }
 
-export function getOrderForm (loja, cb) {
+export function getOrderForm(loja, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getOrderForm(loja)
-      const {data} = response
+      const { data } = response
+      console.log("GET ORDERFORM", response);
       dispatch({
         type: GET_ORDER_FORM,
         payload: data.orderFormId,
@@ -50,7 +52,21 @@ export function getOrderForm (loja, cb) {
   }
 }
 
-export function addItemToOrderForm (
+export function clearOrderForm(cb) {
+  return async (dispatch, state) => {
+    try {
+      console.log("CLEAR ORDER FORM");
+      dispatch({
+        type: CLEAR_ORDER_FORM
+      })
+      cb(false, data)
+    } catch (e) {
+      cb(true)
+    }
+  }
+}
+
+export function addItemToOrderForm(
   loja,
   orderFormId,
   productId,
@@ -67,7 +83,7 @@ export function addItemToOrderForm (
         qty,
         sellerId,
       )
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: UPDATE_ORDERFORM,
@@ -80,7 +96,7 @@ export function addItemToOrderForm (
   }
 }
 
-export function removeItemOrderForm (loja, orderFormId, index, qty, cb) {
+export function removeItemOrderForm(loja, orderFormId, index, qty, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.orderRemoveItem(
@@ -89,7 +105,7 @@ export function removeItemOrderForm (loja, orderFormId, index, qty, cb) {
         index,
         qty,
       )
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: UPDATE_ORDERFORM,
@@ -102,11 +118,11 @@ export function removeItemOrderForm (loja, orderFormId, index, qty, cb) {
   }
 }
 
-export function removeCupomOrderForm (store, orderFormId, cb) {
+export function removeCupomOrderForm(store, orderFormId, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.removeCoupon(store, orderFormId)
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: REMOVE_COUPON,
@@ -121,11 +137,11 @@ export function removeCupomOrderForm (store, orderFormId, cb) {
   }
 }
 
-export function getPostalCode (cep, loja, cb) {
+export function getPostalCode(cep, loja, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getPostalCode(cep, loja)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: GET_POSTAL_CODE,
         payload: {
@@ -139,7 +155,7 @@ export function getPostalCode (cep, loja, cb) {
   }
 }
 
-export function getDeliverys (orderFormId, loja, postalCode, cb) {
+export function getDeliverys(orderFormId, loja, postalCode, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.addShippingData(
@@ -147,7 +163,7 @@ export function getDeliverys (orderFormId, loja, postalCode, cb) {
         loja,
         postalCode,
       )
-      const {data} = response
+      const { data } = response
       dispatch({
         type: GET_DELIVERYS,
         payload: {
@@ -161,7 +177,7 @@ export function getDeliverys (orderFormId, loja, postalCode, cb) {
   }
 }
 
-export function selectDeliveryOption (
+export function selectDeliveryOption(
   orderFormId,
   loja,
   dataDeliveryOption,
@@ -174,7 +190,7 @@ export function selectDeliveryOption (
         loja,
         dataDeliveryOption,
       )
-      const {data, status} = response
+      const { data, status } = response
 
       dispatch({
         type: SELECT_DELIVERY,
@@ -193,11 +209,11 @@ export function selectDeliveryOption (
   }
 }
 
-export function setCoupon (store, orderFormId, text, cb) {
+export function setCoupon(store, orderFormId, text, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.setCoupon(store, orderFormId, text)
-      const {data} = response
+      const { data } = response
       dispatch({
         type: UPDATE_ORDERFORM,
         payload: data,
@@ -209,7 +225,7 @@ export function setCoupon (store, orderFormId, text, cb) {
   }
 }
 
-export function cleanDeliverySelected () {
+export function cleanDeliverySelected() {
   return dispatch => {
     dispatch({
       type: CLEAN_DELIVERY_SELECTED,
@@ -218,11 +234,11 @@ export function cleanDeliverySelected () {
   }
 }
 
-export function addItemGift (loja, orderformId, giftId, items, callback) {
+export function addItemGift(loja, orderformId, giftId, items, callback) {
   return async (dispatch, state) => {
     try {
       const response = await Services.addGift(loja, orderformId, giftId, items)
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: ADD_GIFT,
@@ -239,7 +255,7 @@ export function addItemGift (loja, orderformId, giftId, items, callback) {
   }
 }
 
-export function saveSearchRecent (
+export function saveSearchRecent(
   numbersSearch,
   search,
   keySearch,
@@ -276,7 +292,7 @@ export function saveSearchRecent (
   }
 }
 
-export function clearSearchRecent (cb) {
+export function clearSearchRecent(cb) {
   return async (dispatch, state) => {
     try {
       dispatch({
@@ -293,7 +309,7 @@ export function clearSearchRecent (cb) {
   }
 }
 
-export function getMyOrders (loja, email, pageNumber, pageSize, cb) {
+export function getMyOrders(loja, email, pageNumber, pageSize, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getMyOrders(
@@ -302,7 +318,7 @@ export function getMyOrders (loja, email, pageNumber, pageSize, cb) {
         pageNumber,
         pageSize,
       )
-      const {data} = response
+      const { data } = response
       dispatch({
         type: MY_ORDERS,
         payload: {
@@ -316,7 +332,7 @@ export function getMyOrders (loja, email, pageNumber, pageSize, cb) {
   }
 }
 
-export function getMyOrdersV2 (store, pageNumber, pageSize, token, cb) {
+export function getMyOrdersV2(store, pageNumber, pageSize, token, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.getMyOrdersV2(
@@ -325,7 +341,7 @@ export function getMyOrdersV2 (store, pageNumber, pageSize, token, cb) {
         pageSize,
         token,
       )
-      const {data} = response
+      const { data } = response
       dispatch({
         type: MY_ORDERS,
         payload: {
@@ -339,7 +355,7 @@ export function getMyOrdersV2 (store, pageNumber, pageSize, token, cb) {
   }
 }
 
-export function clearOrders (cb) {
+export function clearOrders(cb) {
   return async (dispatch, state) => {
     try {
       dispatch({
@@ -355,7 +371,7 @@ export function clearOrders (cb) {
   }
 }
 
-export function clearMyOrders (cb) {
+export function clearMyOrders(cb) {
   return async (dispatch, state) => {
     try {
       dispatch({
@@ -369,7 +385,7 @@ export function clearMyOrders (cb) {
   }
 }
 
-export function setCouponMessage (store, orderFormId, textfield, cb) {
+export function setCouponMessage(store, orderFormId, textfield, cb) {
   return async (dispatch, state) => {
     try {
       const response = await Services.setCouponMessage(
@@ -377,7 +393,7 @@ export function setCouponMessage (store, orderFormId, textfield, cb) {
         orderFormId,
         textfield,
       )
-      const {data} = response
+      const { data } = response
 
       dispatch({
         type: UPDATE_ORDERFORM,

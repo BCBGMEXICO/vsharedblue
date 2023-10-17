@@ -196,6 +196,7 @@ export function loginWithSocialNetwork(token, provider, store, cb) {
     try {
       const response = await Services.loginSocialNetwork(token, provider, store)
       const { data } = response
+      console.log("SOCIAL NETWORK DATA", data);
       dispatch({
         type: LOGIN_USER,
         payload: {
@@ -282,13 +283,31 @@ export function validateCode(email, code, store, cb) {
     try {
       const response = await Services.validateCode(email, code, store)
       const { data } = response
-      dispatch({
-        type: VALIDATE_CODE,
-        payload: {
-          data: data?.token,
-        },
-      })
-      cb(false, data)
+      console.log("RESPONSE", response)
+      if (data.authStatus == "Success") {
+        console.log("CALLING DISPATCHES");
+        dispatch({
+          type: VALIDATE_CODE,
+          payload: {
+            data: data?.authCookie?.Value,
+          },
+        })
+
+        let userData = {
+          email: data.email,
+          firstname: data.firstname,
+          lastname: data.lastname,
+          phone: data.phone
+        };
+
+        dispatch({
+          type: UPDATE_USER2,
+          payload: userData,
+        })
+        cb(false, data)
+      }
+      else
+        cb(true, data)
     } catch (e) {
       cb(true, e)
     }

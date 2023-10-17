@@ -80,11 +80,16 @@ export const loginSocialNetwork = (token, provider, store) => instance.post(
  */
 export const getInfoWithId = (id, store) => instance.get(`/admin/api/uservtex/${id}`, { headers: { store } })
 
-export const getToken = (email, store) => instance.post(
-  '/admin/api/v3/uservtex/login-code',
-  { email },
-  { headers: { store } },
-)
+export const getToken = (email, store) => instance.post('https://domains.pleair.com/bcbg/api/login/send-key-email/', { email: email })
+
+
+
+
+// instance.post(
+//   '/admin/api/v3/uservtex/login-code',
+//   { email },
+//   { headers: { store } },
+// )
 
 export const getTokenRecoveryPassword = (email, store) => instance.post(
   '/admin/api/uservtex/login-code?password_recovery',
@@ -93,10 +98,15 @@ export const getTokenRecoveryPassword = (email, store) => instance.post(
 )
 
 export const validateCode = (email, code, store) => instance.post(
-  '/admin/api/v3/uservtex/validate-code',
-  { email, code },
-  { headers: { store } },
+  'https://domains.pleair.com/bcbg/api/login/login-accesskey/',
+  { email: email, code: code },
 )
+
+// instance.post(
+//   '/admin/api/v3/uservtex/validate-code',
+//   { email, code },
+//   { headers: { store } },
+// )
 
 export const changeRecoveryPassword = (token, password, store) => {
   const ApplicationToken = `Bearer ${token}`
@@ -147,7 +157,7 @@ export const getUserExists = (email, store) => {
 
 export const createUser = (orderFormId, userData, store) => {
   https://{accountName}.{environment}.com.br/api/checkout/pub/orderForm/{orderFormId}/attachments/clientProfileData
-  return instance.post(`https://bcbgmx.myvtex.com/api/checkout/pub/orderForm/${orderFormId}/attachments/clientProfileData`,userData, {
+  return instance.post(`https://bcbgmx.myvtex.com/api/checkout/pub/orderForm/${orderFormId}/attachments/clientProfileData`, userData, {
     headers: { store },
   })
 }

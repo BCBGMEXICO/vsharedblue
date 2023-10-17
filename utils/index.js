@@ -2,13 +2,14 @@ import React from 'react'
 import { Platform } from 'react-native'
 
 export default utils = {
-  formatMoney: Platform.OS === 'ios' ? (value) => Number(value).toLocaleString('pt-BR', {
-    currency: 'BRL',
+  formatMoney: Platform.OS === 'ios' ? (value) => Number(value).toLocaleString('es-MX', {
+    currency: 'MXN',
     minimumFractionDigits: 2,
   }) : (value) => {
+    console.log("NUMBER", value)
     const numero = value.toFixed(2).split('.')
-    numero[0] = `${numero[0].includes('-') ? numero[0].split(/(?=(?:....)*$)/).join('.') : numero[0].split(/(?=(?:...)*$)/).join('.')}`
-    return numero.join(',')
+    numero[0] = `${numero[0].includes('-') ? numero[0].split(/(?=(?:....)*$)/).join(',') : numero[0].split(/(?=(?:...)*$)/).join(',')}`
+    return numero.join('.')
   },
   formatCapitalize: (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(),
   DontRender: ({ condition, children }) => (condition ? <>{children()}</> : <></>),

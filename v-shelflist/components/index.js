@@ -5,10 +5,10 @@ import React, {
   useContext,
   useEffect,
 } from 'react'
-import {useDispatch, useStore} from 'react-redux'
+import { useDispatch, useStore } from 'react-redux'
 
-import {ProductContext} from '../../context/Product'
-import {addItemToOrderForm} from '../../redux/oms/actions'
+import { ProductContext } from '../../context/Product'
+import { addItemToOrderForm } from '../../redux/oms/actions'
 import utils from '../../utils'
 import Controller from '../controllers'
 import * as style from '../styles'
@@ -20,7 +20,7 @@ export const ProductImage = props => {
   const ids = images[5]
   images[5] = `${ids}-500-800`
 
-  return <style.Image {...props} source={{uri: images.join('/')}} />
+  return <style.Image {...props} source={{ uri: images.join('/') }} />
 }
 
 export const ProductName = props => {
@@ -41,9 +41,12 @@ export const Price = props => {
     Controller.availableProducts(product, sellersAvailables => {
       if (sellersAvailables.length > 0) {
         setPrice(
-          utils.formatMoney(
-            sellersAvailables[0].sellers[0].commertialOffer.Price,
-          ),
+          ` $ ${utils.formatMoney(sellersAvailables[0].sellers[0].commertialOffer.Price, 'es-MX', {
+            precision: 0,
+          })}`
+          // utils.formatMoney(
+          //   sellersAvailables[0].sellers[0].commertialOffer.Price,
+          // ),
         )
       }
     })
@@ -63,7 +66,12 @@ export const ListPrice = props => {
         e => e.commertialOffer.ListPrice,
       )
       if (sellersAvailables.length > 0) {
-        setListPrice(utils.formatMoney(price[0].commertialOffer.ListPrice))
+        setListPrice(
+          //utils.formatMoney(price[0].commertialOffer.ListPrice)
+          ` $ ${utils.formatMoney(price[0].commertialOffer.ListPrice, 'es-MX', {
+            precision: 0,
+          })}`
+        )
       }
     })
   }, [])
@@ -125,7 +133,7 @@ export const BestInstallmentsValue = props => {
  */
 const SelectorSkus = props => {
   const product = useContext(ProductContext)
-  const {children, items} = props
+  const { children, items } = props
 
   items(product.items)
 
@@ -138,7 +146,7 @@ const SelectorSkus = props => {
  */
 const AddToCart = props => {
   const product = useContext(ProductContext)
-  const {children} = props
+  const { children } = props
   const dispatch = useDispatch()
   const store = useStore()
   const verifyProduct = !product.selectedItem
@@ -184,4 +192,4 @@ const AddToCart = props => {
   )
 }
 
-export {AddToCart, SelectorSkus}
+export { AddToCart, SelectorSkus }

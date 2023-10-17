@@ -68,7 +68,7 @@ export function addClientProfile(store, orderFormId, clientProfileData, cb) {
         orderFormId,
         clientProfileData,
       )
-
+      console.log("UPDAING CLIENT PROFILE", response);
       const { data } = response
 
       actions.updateOrderForm(data, (err, orderForm) => cb(false, orderForm))

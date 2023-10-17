@@ -51,6 +51,7 @@ export default (state = INITIAL, action) => {
         userToken: undefined,
       };
     case LOGIN_USER:
+      console.log("LOGIN STATE", state.login?.user);
       return {
         ...state,
         userToken: action.payload.data.token,
