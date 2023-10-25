@@ -25,7 +25,7 @@ const INITIAL = {
   selectDelivery: undefined,
   searchRecent: [],
   myRequests: [],
-}
+};
 
 export default (state = INITIAL, action) => {
   console.log("UPDATING ORDER FORM", action.payload);
@@ -37,7 +37,7 @@ export default (state = INITIAL, action) => {
           ...state.orderForm,
           ...action.payload,
         },
-      }
+      };
     case GET_ORDER_FORM:
       return {
         ...state,
@@ -45,7 +45,7 @@ export default (state = INITIAL, action) => {
           ...state.orderForm,
           orderFormId: action.payload,
         },
-      }
+      };
     case ADD_ITEM_TO_ORDER_FORM:
       return {
         ...state,
@@ -53,7 +53,7 @@ export default (state = INITIAL, action) => {
           ...state.orderForm,
           ...action.payload.data,
         },
-      }
+      };
     case REMOVE_ITEM_ORDER_FORM:
       return {
         ...state,
@@ -88,23 +88,23 @@ export default (state = INITIAL, action) => {
       return {
         ...state,
         postalCode: action.payload.data,
-      }
+      };
     case GET_DELIVERYS:
       return {
         ...state,
         delivery: action.payload.data,
-      }
+      };
     case SELECT_DELIVERY:
       return {
         ...state,
         orderForm: action.payload.data,
         totalizerFinalFrete: action.payload.data.totalizers[1].value,
-      }
+      };
     case CLEAN_DELIVERY_SELECTED:
       return {
         ...state,
         totalizerFinalFrete: action.payload,
-      }
+      };
     case SET_COUPON:
       return {
         ...state,
@@ -114,7 +114,7 @@ export default (state = INITIAL, action) => {
           ratesAndBenefitsData: action.payload.data.ratesAndBenefitsData,
           value: action.payload.value,
         },
-      }
+      };
     case ADD_GIFT:
       return {
         ...state,
@@ -129,27 +129,27 @@ export default (state = INITIAL, action) => {
               : '',
           items: action.payload.data.items,
         },
-      }
+      };
     case SAVE_SEARCH:
       return {
         ...state,
         searchRecent: action.payload.data,
-      }
+      };
     case MY_ORDERS:
       return {
         ...state,
         myRequests: [...state.myRequests, ...action.payload.data],
-      }
+      };
     case CLEAR_ORDERS:
       return {
         ...state,
         myRequests: action.payload.data,
-      }
+      };
     case CLEAR_MY_ORDERS:
       return {
         ...state,
         myRequests: [],
-      }
+      };
     case SAVE_CUPOM_PRICE:
       return {
         ...state,
@@ -157,7 +157,7 @@ export default (state = INITIAL, action) => {
           ...state.orderForm,
           totalizers: action.payload.data,
         },
-      }
+      };
     case REMOVE_COUPON:
       return {
         ...state,
@@ -165,8 +165,8 @@ export default (state = INITIAL, action) => {
           ...state.orderForm,
           totalizers: action.payload.data,
         },
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
