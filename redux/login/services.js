@@ -83,8 +83,6 @@ export const getInfoWithId = (id, store) => instance.get(`/admin/api/uservtex/${
 export const getToken = (email, store) => instance.post('https://domains.pleair.com/bcbg/api/login/send-key-email/', { email: email })
 
 
-
-
 // instance.post(
 //   '/admin/api/v3/uservtex/login-code',
 //   { email },
